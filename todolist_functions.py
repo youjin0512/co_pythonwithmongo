@@ -11,7 +11,7 @@ def Data_insert(collection, data):
     collection.delete_many({})
     collection.delete_many({})
     # 데이터 입력
-    collection.insert_one(data)           # hint : data -> 
+    collection.insert_many(data)           # hint : insert_one -> insert_many 
 
 # 사용자 이름 입력 function
 def User_name(collection):
@@ -29,17 +29,20 @@ def Todos(user_id, collection1, collection2):
     print("ToDo List 중 하나 선택 하세요 !")
 
     # todos_list 컬렉션의 내용 중 'title'만 print
-    result_todo = user_id.find({})           # hint : 
+    result_todo = collection1.find({})           # hint : user_id -> collection1
     count = 1
     for i in result_todo:
-        print("{}. {} {}".format(count, i["title"]), end=" ")           # hint
+        # print("{}. {} {}".format(count, i["title"]), end=" ")           # hint
+        print("{}. {}".format(count, i["title"]), end=", ")           # hint : {} 하나 삭제, end=", "로 변경
         count+= 3           # hint
     print("")
 
     # todo중 하나 입력
     user_input = int(input("Title 번호: "))-1           # hint : int( ) 삽입, -1 위치변경(Python의 인덱싱을 일치시키기 위한 것?)
     # Status 입력
+    # user_status = int(input("Status: "))           # hint   (기존)
     user_status = str(input("Status: "))           # hint : int -> str
+
 
     # 사용자가 입력한 번호에 해당하는 title과 그 title id를 찾음
     result_todo_title = collection1.find().skip(user_input).limit(1)
@@ -51,8 +54,10 @@ def Todos(user_id, collection1, collection2):
     collection2.insert_one({"user_id" : user_id, "user_todo_id" : inserted_todo_id, "todo_title" : inserted_todo, "user_status" : user_status})
 
 # 종료 여부 입력 function
-def End(collection1, collection2):           # hint
-    user_end = 'x'           # hint
+# def End(collection1, collection2):           # hint
+def End(collection, collection1, collection2):           # hint : collection 추가
+    # user_end = 'x'           # hint
+    user_end = 'q'           # hint : 'x' -> 'q'
     while True:
         # c 입력 시 Todos() 다시 실행
         if user_end == "c":
